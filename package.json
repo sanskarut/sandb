@@ -1,0 +1,28 @@
+{
+  "name": "multi-mongo-cluster",
+  "version": "1.0.0",
+  "description": "Multi MongoDB connection manager with load balancing and failover",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "keywords": [
+    "mongodb",
+    "cluster",
+    "multi-db",
+    "load-balancer"
+  ],
+  "author": "Sanskar",
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^6.21.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
