@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "test": "ts-node test/multiConnection.test.ts",
     "dev": "tsc -w"
   },
   "keywords": [
@@ -17,12 +18,16 @@
     "multi-db",
     "load-balancer"
   ],
-  "author": "Sanskar",
+  "author": {
+    "name": "Sanskar Bandgar",
+    "github": "https://github.com/mrsanskar19"
+  },
   "license": "MIT",
   "dependencies": {
     "mongodb": "^6.21.0"
   },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

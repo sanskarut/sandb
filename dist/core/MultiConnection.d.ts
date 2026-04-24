@@ -4,7 +4,13 @@ export declare class MultiConnection {
     private nodes;
     private lastIndex;
     private maxDocumentsPerDB;
-    connect(dbs: Db[], maxDocumentsPerDB?: number): Promise<void>;
+    private connectionCache;
+    private adapterCache;
+    connect(dbs: (string | {
+        uri: string;
+        dbName?: string;
+    })[], maxDocumentsPerDB?: number): Promise<void>;
+    disconnectAll(): Promise<void>;
     private getAvailableNodes;
     private getNextNode;
     insertOne<T extends Document>(collection: string, doc: OptionalUnlessRequiredId<T>): Promise<InsertOneResult<T>>;

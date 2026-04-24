@@ -9,7 +9,7 @@ class MongoAdapter {
     }
     async connect() {
         await this.client.connect();
-        return this.client.db();
+        return this.client.db("main");
     }
     async disconnect() {
         await this.client.close();

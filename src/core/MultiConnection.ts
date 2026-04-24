@@ -16,21 +16,70 @@ import {
 import { NodeState } from "../types";
 import { NoNodeAvailableError } from "../utils/errors";
 import { retry } from "../utils/retry";
+import { MongoAdapter } from "../adapters/MongoAdapter";
 
 export class MultiConnection {
     private nodes: NodeState[] = [];
     private lastIndex = 0;
     private maxDocumentsPerDB = Infinity;
 
-    async connect(dbs: Db[], maxDocumentsPerDB?: number) {
+    private connectionCache = new Map<string, Db>();
+    private adapterCache = new Map<string, MongoAdapter>();
+    
+    async connect(
+        dbs: (string | { uri: string; dbName?: string })[],
+        maxDocumentsPerDB?: number
+    ) {
         this.maxDocumentsPerDB = maxDocumentsPerDB ?? Infinity;
-        this.nodes = dbs.map(db => ({
-            db,
-            status: "online",
-            latency: 0
-        }));
+    
+        const nodes: NodeState[] = [];
+    
+        for (const entry of dbs) {
+            const uri = typeof entry === "string" ? entry : entry.uri;
+            const dbName = typeof entry === "string" ? undefined : entry.dbName;
+    
+            try {
+                let db: Db;
+    
+                const cacheKey = dbName ? `${uri}_${dbName}` : uri;
+    
+                if (this.connectionCache.has(cacheKey)) {
+                    db = this.connectionCache.get(cacheKey)!;
+                } else {
+                    const adapter = new MongoAdapter(uri);
+                    const rawDb = await adapter.connect();
+    
+                    db = dbName ? rawDb.client.db(dbName) : rawDb;
+    
+                    this.connectionCache.set(cacheKey, db);
+                    this.adapterCache.set(cacheKey, adapter);
+                }
+    
+                nodes.push({
+                    db,
+                    status: "online",
+                    latency: 0
+                });
+            } catch {
+                continue;
+            }
+        }
+    
+        this.nodes = nodes;
     }
 
+
+    async disconnectAll() {
+        for (const db of this.connectionCache.values()) {
+            try {
+                await db.client.close();
+            } catch {}
+        }
+    
+        this.connectionCache.clear();
+        this.nodes = [];
+    }
+    
     private getAvailableNodes() {
         const nodes = this.nodes.filter(n => n.status === "online");
         if (!nodes.length) throw new NoNodeAvailableError();
