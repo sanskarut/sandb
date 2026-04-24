@@ -7,7 +7,7 @@ A lightweight multi-database MongoDB connection manager with load balancing, fai
 ## 📦 Installation
 
 ```bash
-npm install multi-mongo-cluster
+npm install sandb
 ```
 
 ---
@@ -15,8 +15,8 @@ npm install multi-mongo-cluster
 ## 🤝 Contributing
 
 ```bash
-git clone https://github.com/your-username/multi-mongo-cluster.git
-cd multi-mongo-cluster
+git clone https://github.com/sanskarut/sandb.git
+cd sandb
 npm install
 npm run build
 ```

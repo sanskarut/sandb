@@ -1,6 +1,6 @@
 {
-  "name": "multi-mongo-cluster",
-  "version": "1.0.0",
+  "name": "sandb",
+  "version": "1.0.2",
   "description": "Multi MongoDB connection manager with load balancing and failover",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,5 +29,8 @@
   "devDependencies": {
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }
